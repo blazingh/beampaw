@@ -1,14 +1,11 @@
 package main
 
 import (
-	"bytes"
-	"encoding/binary"
 	"fmt"
 	"io"
 	"log"
 	"math"
 	"math/rand"
-	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -24,27 +21,6 @@ type File struct {
 type Tunnel struct {
 	writer   io.Writer
 	doneChan chan struct{}
-}
-
-func sendFile() error {
-	file := []byte("hello world fro the other side\n")
-	_, err := io.ReadAll(bytes.NewReader(file))
-	if err != nil {
-		return err
-	}
-
-	conn, err := net.Dial("tcp", ":8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	binary.Write(conn, binary.LittleEndian, int64(len(file)))
-	n, err := io.CopyN(conn, bytes.NewReader(file), int64(len(file)))
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("wrote %d bytes to file\n", n)
-	return nil
 }
 
 var files = map[int]File{}
@@ -107,7 +83,7 @@ func main() {
 		s.Close()
 	})
 
-	log.Fatal(ssh.ListenAndServe(":2222", nil))
+	log.Fatal(ssh.ListenAndServe(":2222", nil, ssh.HostKeyFile("./id_rsa")))
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
