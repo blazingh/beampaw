@@ -1,0 +1,34 @@
+<body>
+  <button onclick="download()">download</button>
+</body>
+
+<script>
+
+  async function download() {
+
+    var fileid = window.location.search.substring(1);
+    const url = "http://localhost:8080/file?id=" + fileid.split("=")[1];
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const filenameHeader = response.headers.get('Content-Disposition');
+        const filename = filenameHeader ? filenameHeader.split('filename=')[1] : 'download';
+        return response.blob().then(blob => ({ blob, filename }));
+      })
+      .then(({ blob, filename }) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(error => console.error('Error downloading file:', error));
+
+  }
+
+</script>
+
