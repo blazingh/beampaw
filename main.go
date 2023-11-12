@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"math"
@@ -55,7 +56,14 @@ func main() {
 
 	// start http server with a go routine
 	go func() {
+		// set up a file server
+		fs := http.FileServer(http.Dir("./public"))
+		http.Handle("/public/", http.StripPrefix("/public/", fs))
+
+		http.HandleFunc("/home", handleHome)
+
 		http.HandleFunc("/file", handleHttp)
+
 		fmt.Printf("HTTP Listening on port %s\n", httpPort)
 		log.Fatal(http.ListenAndServe(":"+httpPort, nil))
 	}()
@@ -160,4 +168,10 @@ func handleHttp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	<-doneChan
+}
+
+func handleHome(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	tmpl := template.Must(template.ParseFiles("template/home.html"))
+	tmpl.Execute(w, nil)
 }
