@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "tailwind": "npx tailwindcss -i ./public/input.css -o ./public/output.css --watch"
+    "tailwind": "npx tailwindcss -i ./global.css -o ./public/index.css --watch"
   },
   "devDependencies": {
     "daisyui": "^4.0.3",
