@@ -534,7 +534,35 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.text-green-500 {
-  --tw-text-opacity: 1;
-  color: rgb(34 197 94 / var(--tw-text-opacity));
+body {
+  background-color: #040a19;
+}
+
+.progressive {
+  overflow: hidden;
+  position: relative;
+}
+
+.progressive__img {
+  width: 100%;
+  height: 100%;
+}
+
+.progressive--not-loaded {
+  filter: blur(10px);
+}
+
+.progressive--is-loaded {
+  filter: blur(5px);
+  animation: sharpen 0.5s both;
+}
+
+@keyframes sharpen {
+  from {
+    filter: blur(5px);
+  }
+
+  to {
+    filter: blur(0px);
+  }
 }

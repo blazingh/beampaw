@@ -8,14 +8,33 @@
   <title>Beam Paw</title>
   <link rel="stylesheet" href="/public/output.css">
   <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+  <script src="https://unpkg.com/progressively/dist/progressively.min.js"></script>
 </head>
+
+<style>
+  #section_1 {
+    background-color: #040a19;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100vw;
+    height: 100vh;
+  }
+</style>
 
 <body>
   <main>
-    <div class="text-green-500">
-      <h1>Beam Paw</h1>
+    <div id="section_1" class="progressive__bg progressive--not-loaded"
+      data-progressive="/public/beam_paw_background.png" data-progressive-sm="/public/beam_paw_background@0.75x.png"
+      style="background-image: url('/public/beam_paw_background@0.05x.png');">
     </div>
   </main>
 </body>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    progressively.init()
+  });
+</script>
 
 </html>
