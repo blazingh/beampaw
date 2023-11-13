@@ -13,7 +13,7 @@
 
 <style>
   #section_1 {
-    background-color: #040a19;
+    background-image: url('/public/beam_paw_background@0.05x.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -24,9 +24,18 @@
 
 <body>
   <main>
-    <div id="section_1" class="progressive__bg progressive--not-loaded"
-      data-progressive="/public/beam_paw_background.png" data-progressive-sm="/public/beam_paw_background@0.75x.png"
-      style="background-image: url('/public/beam_paw_background@0.05x.png');">
+    <div id="section_1" class="progressive__bg progressive--not-loaded relative flex items-center justify-center"
+      data-progressive="/public/beam_paw_background.png" data-progressive-sm="/public/beam_paw_background@0.75x.png">
+
+      <a href="https://github.com/blazingh" target="_blank" class="absolute top-4 right-4 w-8 h-8 md:w-10 md:h-10">
+        <img src="/public/github-mark-white.svg" alt="GitHub">
+      </a>
+
+      <div class="mockup-code w-min text-primary -translate-y-1/2 relative shadow-xl">
+        <pre><code id="stat-code"></code></pre>
+        <p class="text-lg absolute top-3 left-1/2 -translate-x-1/2 text-white">Quick start</p>
+      </div>
+
     </div>
   </main>
 </body>
@@ -34,6 +43,7 @@
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     progressively.init()
+    document.getElementById('stat-code').textContent = '$ ssh beampaw.xyz < echo "Hello World"'
   });
 </script>
 
