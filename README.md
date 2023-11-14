@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://example.com/">
-    <img src="https://raw.githubusercontent.com/blazingh/beampaw/main/public/beam_paw_icon.jpeg" alt="Logo" width=72 height=72>
+  <a href="https://beampaw.xyz">
+    <img src="https://raw.githubusercontent.com/blazingh/beampaw/main/public/beam_paw_icon.jpeg" alt="Logo" width=90 height=90 style="borber-radius:150px;">
   </a>
 
   <h3 align="center">Beam Paw</h3>
