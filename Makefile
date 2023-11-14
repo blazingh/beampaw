@@ -67,5 +67,6 @@ tailwind-watch:
 .PHONY: production/deploy
 production/deploy: confirm tidy no-dirty
 	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=/tmp/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
-	upx -5 /tmp/bin/linux_amd64/${BINARY_NAME}
+	echo "output to /tmp/bin/linux_amd64/${BINARY_NAME}"
+	echo "this script is not yet complete"
 
