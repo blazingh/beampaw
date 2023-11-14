@@ -2,7 +2,7 @@ package httpHandler
 
 import (
 	"fmt"
-	"github/blazingh/go-stream/sshHandler"
+	"github.com/blazingh/beampaw/sshHandler"
 	"html/template"
 	"log"
 	"net/http"

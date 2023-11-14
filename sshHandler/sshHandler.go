@@ -2,7 +2,7 @@ package sshHandler
 
 import (
 	"fmt"
-	"github/blazingh/go-stream/helper"
+	"github.com/blazingh/beampaw/helper"
 	"io"
 	"log"
 	"math"

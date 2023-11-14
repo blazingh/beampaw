@@ -1,4 +1,4 @@
-module github/blazingh/go-stream
+module github.com/blazingh/beampaw
 
 go 1.21.1
 

@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github/blazingh/go-stream/httpHandler"
-	"github/blazingh/go-stream/sshHandler"
+	"github.com/blazingh/beampaw/httpHandler"
+	"github.com/blazingh/beampaw/sshHandler"
 
 	"github.com/joho/godotenv"
 )
