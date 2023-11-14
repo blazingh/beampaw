@@ -17,7 +17,7 @@ confirm:
 
 .PHONY: no-dirty
 no-dirty:
-	git diff --exit-codearget: start
+	git diff --exit-code > /dev/null
 
 # ==================================================================================== #
 # QUALITY CONTROL
