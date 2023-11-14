@@ -1,51 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{{define "head"}}
+{{end}}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Beam Paw</title>
-  <link rel="stylesheet" href="/public/index.css">
-  <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
-  <script src="https://unpkg.com/progressively/dist/progressively.min.js"></script>
-</head>
+{{define "styles"}}
+{{end}}
 
-<style>
-  #section_1 {
-    background-image: url('/public/beam_paw_background@0.05x.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 100vw;
-    height: 100vh;
-  }
-</style>
+{{define "content"}}
+<div class="mockup-code w-min text-primary -translate-y-1/2 relative shadow-xl">
+  <pre><code id="stat-code">$ ssh beampaw.xyz help</code></pre>
+  <p class="text-lg absolute top-3 left-1/2 -translate-x-1/2 text-white">Quick start</p>
+</div>
+{{end}}
 
-<body>
-  <main>
-    <div id="section_1" class="progressive__bg progressive--not-loaded relative flex items-center justify-center"
-      data-progressive="/public/beam_paw_background.png" data-progressive-sm="/public/beam_paw_background@0.75x.png">
-
-      <a href="https://github.com/blazingh/beampaw" target="_blank"
-        class="absolute top-4 right-4 w-8 h-8 md:w-10 md:h-10">
-        <img src="/public/github-mark-white.svg" alt="GitHub">
-      </a>
-
-      <div class="mockup-code w-min text-primary -translate-y-1/2 relative shadow-xl">
-        <pre><code id="stat-code"></code></pre>
-        <p class="text-lg absolute top-3 left-1/2 -translate-x-1/2 text-white">Quick start</p>
-      </div>
-
-    </div>
-  </main>
-</body>
-
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    progressively.init()
-    document.getElementById('stat-code').textContent = '$ echo "Quick start" | ssh beampaw.xyz'
-  });
-</script>
-
-</html>
+{{define "scripts"}}
+{{end}}

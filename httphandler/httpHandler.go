@@ -25,6 +25,8 @@ func Start() {
 
 	http.HandleFunc("/file", handleFile)
 
+	http.HandleFunc("/download", handleDownload)
+
 	fmt.Printf("HTTP Listening on port %s\n", httpPort)
 	log.Fatal(http.ListenAndServe(":"+httpPort, nil))
 }
@@ -57,6 +59,39 @@ func handleFile(w http.ResponseWriter, r *http.Request) {
 
 func handleLanding(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	tmpl := template.Must(template.ParseFiles("template/home.html"))
-	tmpl.Execute(w, nil)
+	tmpl, _ := template.New("base").ParseFiles("template/base.html", "template/home.html")
+	err := tmpl.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
+}
+
+func handleDownload(w http.ResponseWriter, r *http.Request) {
+	idstr := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		w.Write([]byte("invalid id"))
+		return
+	}
+
+	openTunnel, ok := sshHandler.OpenedTunnels[id]
+	if !ok {
+		w.Write([]byte("not found"))
+		return
+	}
+
+	data := struct {
+		FileName    string
+		DownloadURL string
+	}{
+		FileName:    openTunnel.FileName,
+		DownloadURL: os.Getenv("WEB_URL") + "/file?id=" + idstr,
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	tmpl, _ := template.New("base").ParseFiles("template/base.html", "template/download.html")
+	err = tmpl.ExecuteTemplate(w, "base", data)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }

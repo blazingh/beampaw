@@ -1,0 +1,55 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Beam Paw</title>
+  <link rel="stylesheet" href="/public/index.css">
+  <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+  <script src="https://unpkg.com/progressively/dist/progressively.min.js"></script>
+  {{template "head" .}}
+</head>
+
+<style>
+  #section_1 {
+    background-image: url('/public/beam_paw_background@0.05x.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100vw;
+    height: 90vh;
+  }
+</style>
+
+{{template "styles" .}}
+
+
+<body>
+  <main>
+    <div id="section_1" class="progressive__bg progressive--not-loaded relative flex items-center justify-center p-4"
+      data-progressive="/public/beam_paw_background.png" data-progressive-sm="/public/beam_paw_background@0.75x.png">
+
+      <a href="https://github.com/blazingh/beampaw" target="_blank"
+        class="absolute top-4 right-4 w-8 h-8 md:w-10 md:h-10">
+        <img src="/public/github-mark-white.svg" alt="GitHub">
+      </a>
+
+      {{template "content" .}}
+
+    </div>
+  </main>
+</body>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    progressively.init()
+  });
+</script>
+
+{{template "scripts" .}}
+
+</html>
+{{end}}

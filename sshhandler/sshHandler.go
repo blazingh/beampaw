@@ -76,12 +76,20 @@ func handleConnection(s ssh.Session) {
 		}
 	}(id)
 
-	// link
+	// download page link
 	pterm.DefaultBox.
 		WithWriter(s).
 		WithLeftPadding(2).
 		WithRightPadding(2).
-		WithTitle(pterm.FgCyan.Sprint("direct download link")).
+		WithTitle(pterm.FgCyan.Sprint("Download page")).
+		Println(os.Getenv("WEB_URL") + "/download?id=" + strconv.Itoa(id))
+	pterm.DefaultBasicText.WithWriter(s).Print("\n")
+	// direct link
+	pterm.DefaultBox.
+		WithWriter(s).
+		WithLeftPadding(2).
+		WithRightPadding(2).
+		WithTitle(pterm.FgCyan.Sprint("Direct download link")).
 		Println(os.Getenv("WEB_URL") + "/file?id=" + strconv.Itoa(id))
 	pterm.DefaultBasicText.WithWriter(s).Print("\n")
 

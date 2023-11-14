@@ -1,0 +1,41 @@
+{{define "head"}}
+{{end}}
+
+{{define "styles"}}
+{{end}}
+
+{{define "content"}}
+<div
+  class="bg-neutral text-primary w-full max-w-sm -translate-y-1/2 relative shadow-xl rounded-3xl px-8 py-6 flex flex-col items-center gap-4">
+
+  <p class="w-full text-center text-white text-lg">"{{.FileName}}"</p>
+
+  <div id="message" class="w-full text-center text-white text-lg">
+    file waiting for download
+  </div>
+
+  <a href="{{.DownloadURL}}" class="btn btn-primary mt-4" id="download">
+    Download
+  </a>
+
+</div>
+{{end}}
+
+{{define "scripts"}}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const downloadBtn = document.querySelector('#download')
+    const message = document.querySelector('#message')
+
+    downloadBtn.addEventListener('click', () => {
+      setTimeout(() => {
+
+        message.textContent = 'File downloaded'
+        downloadBtn.setAttribute('href', '/')
+        downloadBtn.textContent = 'Home Page'
+
+      }, 1000)
+    })
+  })
+</script>
+{{end}}
