@@ -2,17 +2,16 @@ package sshHandler
 
 import (
 	"fmt"
+	"github/blazingh/go-stream/helper"
 	"io"
 	"log"
 	"math"
 	"math/rand"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/gliderlabs/ssh"
 	"github.com/pterm/pterm"
-	"github.com/pterm/pterm/putils"
 )
 
 type Tunnel struct {
@@ -36,30 +35,28 @@ func Start() {
 }
 
 func handleConnection(s ssh.Session) {
-
-	fmt.Printf("%s : session opened\n", s.User())
-
 	// close the session when the client disconnect
 	defer func() {
 		s.Close()
 	}()
 
-	args := s.Command()
-	if len(args) == 0 {
-		s.Write([]byte("no arguments provided\n"))
-		return
-	}
+	// print project header
+	helper.PrintProjectHeader(s)
 
-	nameCmd := strings.Split(args[0], "=")
-	if len(nameCmd) < 2 || nameCmd[0] != "name" || nameCmd[1] == "" {
-		s.Write([]byte("invalid name command\n"))
-		return
+	// header
+	args, _ := helper.ParseArgs(s.Command())
+
+	// get file name
+	fileName, ok := args["name"]
+	if !ok {
+		pterm.Warning.WithWriter(s).Println("no file name provided, defaulting to 'file.txt'")
+		fileName = "file.txt"
 	}
 
 	// create a new tunnel
 	id := rand.Intn(math.MaxInt)
 	tunnel := Tunnel{
-		FileName: nameCmd[1],
+		FileName: fileName,
 		Writer:   make(chan io.Writer),
 		DoneChan: make(chan struct{}),
 	}
@@ -81,23 +78,13 @@ func handleConnection(s ssh.Session) {
 		}
 	}(id)
 
-	// header
-	pterm.DefaultBasicText.WithWriter(s).Print("\n\n")
-	pterm.DefaultBigText.
-		WithWriter(s).
-		WithLetters(
-			putils.LettersFromStringWithStyle("BEAM ", pterm.FgCyan.ToStyle()),
-			putils.LettersFromStringWithStyle("PAW", pterm.FgLightMagenta.ToStyle())).
-		Render()
-	pterm.DefaultBasicText.WithWriter(s).Print("\n\n")
-
 	// link
 	pterm.DefaultBox.
 		WithWriter(s).
 		WithLeftPadding(2).
 		WithRightPadding(2).
 		WithTitle(pterm.FgCyan.Sprint("direct download link")).
-		Println("http://localhost:8888/file?id=" + strconv.Itoa(id))
+		Println(os.Getenv("WEB_URL") + "/file?id=" + strconv.Itoa(id))
 	pterm.DefaultBasicText.WithWriter(s).Print("\n")
 
 	loader1, _ := pterm.DefaultSpinner.WithWriter(s).Start("waiting for receiver...")
