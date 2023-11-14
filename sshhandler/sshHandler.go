@@ -1,4 +1,4 @@
-package sshHandler
+package sshhandler
 
 import (
 	"fmt"
@@ -64,17 +64,15 @@ func handleConnection(s ssh.Session) {
 
 	// delete the file when the connection is closed
 	defer func(id int) {
-		if _, ok := OpenedTunnels[id]; ok {
-			delete(OpenedTunnels, id)
-		}
+		delete(OpenedTunnels, id)
 	}(id)
 
 	// delete the file if the connection is closed
 	go func(id int) {
 		<-s.Context().Done()
+		delete(OpenedTunnels, id)
 		if _, ok := OpenedTunnels[id]; ok {
 			fmt.Printf("%s : closing tunnel %d\n", s.User(), id)
-			delete(OpenedTunnels, id)
 		}
 	}(id)
 

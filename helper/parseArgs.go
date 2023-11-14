@@ -2,7 +2,7 @@ package helper
 
 import "strings"
 
-// Parse ssh command line arguments from string list into map
+// ParseArgs parses ssh command line arguments from string list into map
 func ParseArgs(args []string) (map[string]string, error) {
 
 	var parsedArgs = make(map[string]string, len(args))

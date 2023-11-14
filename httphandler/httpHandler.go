@@ -1,8 +1,8 @@
-package httpHandler
+package httphandler
 
 import (
 	"fmt"
-	"github.com/blazingh/beampaw/sshHandler"
+	sshHandler "github.com/blazingh/beampaw/sshhandler"
 	"html/template"
 	"log"
 	"net/http"
