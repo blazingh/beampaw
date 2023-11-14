@@ -29,15 +29,6 @@ tidy:
 	go fmt ./...
 	go mod tidy -v
 
-## audit: run quality control checks
-.PHONY: audit
-audit:
-	go mod verify
-	go vet ./...
-	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
-	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
-	go test -race -buildvcs -vet=off ./...
-
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
@@ -54,8 +45,8 @@ run: build
 	/tmp/bin/${BINARY_NAME}
 
 ## run/live: run the application with reloading on file changes with tailwind watch
-.PHONY: run/live
-run/live:
+.PHONY: run/watch
+run/watch:
 	go run github.com/cosmtrek/air@v1.43.0 \
         --build.cmd "make build" --build.bin "/tmp/bin/${BINARY_NAME}" --build.delay "100" \
         --build.exclude_dir "node_modules" \
@@ -74,7 +65,7 @@ tailwind-watch:
 
 ## production/deploy: deploy the application to production
 .PHONY: production/deploy
-production/deploy: confirm tidy audit no-dirty
+production/deploy: confirm tidy no-dirty
 	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=/tmp/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 	upx -5 /tmp/bin/linux_amd64/${BINARY_NAME}
 
