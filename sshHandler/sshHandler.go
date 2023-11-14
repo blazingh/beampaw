@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	"github.com/gliderlabs/ssh"
+	"github.com/pterm/pterm"
+	"github.com/pterm/pterm/putils"
 )
 
 type Tunnel struct {
@@ -79,7 +81,27 @@ func handleConnection(s ssh.Session) {
 		}
 	}(id)
 
-	s.Write([]byte("tunnel id: " + strconv.Itoa(id) + "\n"))
+	// header
+	pterm.DefaultBasicText.WithWriter(s).Print("\n\n")
+	pterm.DefaultBigText.
+		WithWriter(s).
+		WithLetters(
+			putils.LettersFromStringWithStyle("BEAM ", pterm.FgCyan.ToStyle()),
+			putils.LettersFromStringWithStyle("PAW", pterm.FgLightMagenta.ToStyle())).
+		Render()
+	pterm.DefaultBasicText.WithWriter(s).Print("\n\n")
+
+	// link
+	pterm.DefaultBox.
+		WithWriter(s).
+		WithLeftPadding(2).
+		WithRightPadding(2).
+		WithTitle(pterm.FgCyan.Sprint("direct download link")).
+		Println("http://localhost:8888/file?id=" + strconv.Itoa(id))
+	pterm.DefaultBasicText.WithWriter(s).Print("\n")
+
+	loader1, _ := pterm.DefaultSpinner.WithWriter(s).Start("waiting for receiver...")
+
 	fmt.Printf("%s : tunnel is ready: %d\n", s.User(), id)
 
 	// close the tunnel when the connection is closed
@@ -87,13 +109,20 @@ func handleConnection(s ssh.Session) {
 		close(tunnel.DoneChan)
 	}()
 
+	tunnelWriter := <-tunnel.Writer
+	loader1.Info("Connection established")
+
+	loader2, _ := pterm.DefaultSpinner.WithWriter(s).Start("sending file...")
+
 	// send the file
-	_, err := io.Copy(<-tunnel.Writer, s)
+	_, err := io.Copy(tunnelWriter, s)
 	if err != nil {
 		log.Fatal(err)
+		loader2.Fail("Error sending file")
 	}
 
+	loader2.Success("File sent")
+
 	// close the tunnel and the connection
-	s.Write([]byte("file received by receiver\n"))
 	fmt.Printf("%s : done sending file \n", s.User())
 }
