@@ -3,7 +3,7 @@
     "tailwind": "npx tailwindcss -i ./global.css -o ./public/index.css --watch"
   },
   "devDependencies": {
-    "daisyui": "^4.0.3",
+    "daisyui": "^4.0.7",
     "tailwindcss": "^3.3.5"
   }
 }
