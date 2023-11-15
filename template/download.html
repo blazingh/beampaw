@@ -6,36 +6,88 @@
 
 {{define "content"}}
 <div
-  class="bg-neutral text-primary w-full max-w-sm -translate-y-1/2 relative shadow-xl rounded-3xl px-8 py-6 flex flex-col items-center gap-4">
+  class="bg-neutral text-primary w-full max-w-sm relative shadow-xl rounded-3xl px-8 py-6 flex flex-col items-center gap-4">
 
-  <p class="w-full text-center text-white text-lg">"{{.FileName}}"</p>
-
-  <div id="message" class="w-full text-center text-white text-lg">
-    file waiting for download
+  <div id="res-file" class="w-full hidden res-content">
   </div>
 
-  <a href="{{.DownloadURL}}" class="btn btn-primary mt-4" id="download">
-    Download
-  </a>
+  <div class="flex flex-col w-full res-content hidden">
+    <div class="divider divider-info text-white">Looking for other files ?</div>
+  </div>
+
+  <span id="find-file-loader" class="loading loading-dots loading-lg hidden"></span>
+
+  <form class="flex w-full gap-2" id="find-file-form">
+
+    <input name="id" type="text" placeholder="File ID" class="input input-bordered input-primary w-full max-w-xs" />
+
+    <button class="btn btn-active btn-primary self-end" id="find-file-btn" type="submit">
+      Find
+    </button>
+
+  </form>
+
+  <div id="find-file-alert" class="alert w-full hidden"></div>
 
 </div>
 {{end}}
 
 {{define "scripts"}}
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const downloadBtn = document.querySelector('#download')
-    const message = document.querySelector('#message')
 
-    downloadBtn.addEventListener('click', () => {
-      setTimeout(() => {
-
-        message.textContent = 'File downloaded'
-        downloadBtn.setAttribute('href', '/')
-        downloadBtn.textContent = 'Home Page'
-
-      }, 1000)
-    })
+  document.addEventListener("DOMContentLoaded", function () {
+    const idQuery = new URLSearchParams(window.location.search).get("id");
+    if (idQuery) {
+      document.getElementsByName("id")[0].value = idQuery;
+      document.getElementById("find-file-btn").click();
+    }
   })
+
+
+  document.getElementById("find-file-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const id = document.getElementsByName("id")[0].value;
+    const alert = document.getElementById("find-file-alert");
+    const submitButton = document.getElementById("find-file-btn");
+    const loader = document.getElementById("find-file-loader");
+    const resContent = document.getElementsByClassName("res-content");
+    const resFile = document.getElementById("res-file");
+
+    // disable submit button
+    submitButton.disabled = true;
+    // show loader
+    loader.classList.remove("hidden");
+    // hide alert
+    if (!alert.classList.contains("hidden")) {
+      alert.classList.add("hidden");
+    }
+    // hide res content
+    for (let i = 0; i < resContent.length; i++) {
+      if (!resContent[i].classList.contains("hidden")) {
+        resContent[i].classList.add("hidden");
+      }
+    }
+    // send request
+    fetch(`/api/tunnel?id=${id}`).then(function (res) {
+      console.log(res);
+      for (let i = 0; i < resContent.length; i++) {
+        resContent[i].classList.remove("hidden");
+      }
+      resFile.innerHTML = res;
+    }).catch(function (error) {
+      console.log(error);
+      // show error alert
+      alert.classList.remove("hidden");
+      alert.classList.add("alert-error");
+      alert.innerHTML = "Tunnel not found!";
+    }).finally(function () {
+      // enable submit button
+      submitButton.disabled = false;
+      // hide loader
+      loader.classList.add("hidden");
+    });
+  });
+
 </script>
 {{end}}
