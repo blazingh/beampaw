@@ -69,7 +69,9 @@
       }
     }
     // send request
-    fetch(`/api/tunnel?id=${id}`).then(function (res) {
+    fetch(`/components/file?id=${id}`).then(function (res) {
+      return res.text();
+    }).then(function (res) {
       console.log(res);
       for (let i = 0; i < resContent.length; i++) {
         resContent[i].classList.remove("hidden");

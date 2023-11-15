@@ -1,0 +1,23 @@
+{{define "fileDownload"}}
+<a href="{{.DownloadURL}}" download="{{.FileName}}" target="_blank">
+  <div class="flex gap-4 w-full p-4 bg-success rounded-lg border-2 border-success-content">
+    <div
+      class="bg-secondary w-[52px] h-[66px] text-secondary-content font-bold text-lg rounded-lg p-2 flex items-end justify-end flex-shrink-0">
+      {{.FileExtension}}
+    </div>
+    <div class="w-full">
+      <p class="text-success-content text-md font-semibold">
+        {{.FileName}}
+      </p>
+    </div>
+    <div class="self-center text-success-content">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-arrow-big-down-dash">
+        <path d="M15 5H9" />
+        <path d="M15 9v3h4l-7 7-7-7h4V9h6z" />
+      </svg>
+    </div>
+  </div>
+</a>
+{{end}}

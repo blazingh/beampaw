@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/public/index.css">
   <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
   <script src="https://unpkg.com/progressively/dist/progressively.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   {{template "head" .}}
 </head>
 
@@ -46,6 +47,7 @@
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     progressively.init()
+    lucide.createIcons()
   });
 </script>
 

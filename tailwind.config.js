@@ -3,6 +3,9 @@ module.exports = {
   content: ["./template/**/*.{html,js}"],
   theme: {
     extend: {},
+    fontFamily: {
+      sans: ["Poppins", "sans-serif"],
+    },
   },
   daisyui: {
     themes: [
