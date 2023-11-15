@@ -68,7 +68,7 @@ func handleGetFile(w http.ResponseWriter, r *http.Request) {
 		TunnelType:    "ssh",
 		FileName:      openTunnel.FileName,
 		FileExtension: strings.Split(openTunnel.FileName, ".")[1],
-		DownloadURL:   os.Getenv("WEB_URL") + "/download?id=" + idstr,
+		DownloadURL:   os.Getenv("WEB_URL") + "/file?id=" + idstr,
 	}
 	tmpl, err := template.New("fileDownload").ParseFiles("template/components/fileDownload.html")
 	if err != nil {
