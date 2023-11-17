@@ -27,12 +27,12 @@
 
 ### Send a file
 ```bash
-ssh beampaw.xyk < file.txt
+ssh beampaw.xyz < file.txt
 ```
 
 ### Send a file with a specific name
 ```bash
-ssh beampaw.xyk name=myfile.txt < file.txt
+ssh beampaw.xyz name=myfile.txt < file.txt
 ```
 
 
