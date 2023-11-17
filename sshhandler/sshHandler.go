@@ -46,6 +46,18 @@ func handleConnection(s ssh.Session) {
 	// header
 	args, _ := helper.ParseArgs(s.Command())
 
+	// check if help is requested
+	_, ok := args["help"]
+	if ok {
+		pterm.DefaultBulletList.WithWriter(s).WithItems([]pterm.BulletListItem{
+			{Level: 0, Text: "Send a file", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+			{Level: 1, Text: "ssh beampaw.xyz < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+			{Level: 0, Text: "Send a file with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+			{Level: 1, Text: "ssh beampaw.xyz name=myfile.txt < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+		}).Render()
+		return
+	}
+
 	// get file name
 	fileName, ok := args["name"]
 	if !ok {
