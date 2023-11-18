@@ -1,14 +1,17 @@
 package sshhandler
 
 import (
+	"bufio"
 	"fmt"
-	"github.com/blazingh/beampaw/helper"
 	"io"
 	"log"
 	"math"
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
+
+	"github.com/blazingh/beampaw/helper"
 
 	"github.com/gliderlabs/ssh"
 	"github.com/pterm/pterm"
@@ -16,6 +19,7 @@ import (
 
 type Tunnel struct {
 	FileName string
+	FileSize int64
 	Writer   chan io.Writer
 	DoneChan chan struct{}
 }
@@ -40,15 +44,9 @@ func handleConnection(s ssh.Session) {
 		s.Close()
 	}()
 
-	// print project header
-	helper.PrintProjectHeader(s)
-
-	// header
-	args, _ := helper.ParseArgs(s.Command())
-
-	// check if help is requested
-	_, ok := args["help"]
-	if ok {
+	// handle help
+	if len(s.Command()) == 1 && s.Command()[0] == "help" {
+		helper.PrintProjectHeader(s)
 		pterm.DefaultBulletList.WithWriter(s).WithItems([]pterm.BulletListItem{
 			{Level: 0, Text: "Send a file", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
 			{Level: 1, Text: "ssh beampaw.xyz < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
@@ -57,6 +55,25 @@ func handleConnection(s ssh.Session) {
 		}).Render()
 		return
 	}
+
+	// handle scp file streaming
+	if len(s.Command()) != 0 && s.Command()[0] == "scp" {
+		openSCPStream(s)
+		return
+	}
+
+	// handle ssh file streaming
+	openSSHStream(s)
+	return
+
+}
+
+func openSSHStream(s ssh.Session) {
+
+	helper.PrintProjectHeader(s)
+
+	// parse args
+	args, _ := helper.ParseArgs(s.Command())
 
 	// get file name
 	fileName, ok := args["name"]
@@ -69,12 +86,12 @@ func handleConnection(s ssh.Session) {
 	id := rand.Intn(math.MaxInt)
 	tunnel := Tunnel{
 		FileName: fileName,
+		FileSize: 0,
 		Writer:   make(chan io.Writer),
 		DoneChan: make(chan struct{}),
 	}
 	OpenedTunnels[id] = tunnel
 
-	// delete the file when the connection is closed
 	defer func(id int) {
 		delete(OpenedTunnels, id)
 	}(id)
@@ -88,6 +105,9 @@ func handleConnection(s ssh.Session) {
 		}
 	}(id)
 
+	// tunnel id
+	pterm.Info.WithWriter(s).Println("tunnel id: " + strconv.Itoa(id))
+	pterm.DefaultBasicText.WithWriter(s).Print("\n")
 	// download page link
 	pterm.DefaultBox.
 		WithWriter(s).
@@ -122,7 +142,6 @@ func handleConnection(s ssh.Session) {
 	// send the file
 	_, err := io.Copy(tunnelWriter, s)
 	if err != nil {
-		log.Fatal(err)
 		loader2.Fail("Error sending file")
 	}
 
@@ -130,4 +149,58 @@ func handleConnection(s ssh.Session) {
 
 	// close the tunnel and the connection
 	fmt.Printf("%s : done sending file \n", s.User())
+	return
+}
+
+func openSCPStream(s ssh.Session) {
+
+	s.Write([]byte{0x00})
+
+	reader := bufio.NewReader(s)
+	header, err := reader.ReadString('\n')
+	if err != nil {
+		return
+	}
+
+	headerItems := strings.Split(strings.Replace(header, "\n", " ", -1), " ")
+	if len(headerItems) < 3 {
+		return
+	}
+
+	// create a new tunnel
+	id := rand.Intn(math.MaxInt)
+
+	fmt.Printf("tunnel id: %s", strconv.Itoa(id))
+
+	fileSizeInt, err := strconv.Atoi(headerItems[1])
+	if err != nil {
+		return
+	}
+
+	tunnel := Tunnel{
+		FileName: headerItems[2],
+		FileSize: int64(fileSizeInt),
+		Writer:   make(chan io.Writer),
+		DoneChan: make(chan struct{}),
+	}
+	OpenedTunnels[id] = tunnel
+
+	defer func() {
+		close(tunnel.DoneChan)
+	}()
+
+	s.Write([]byte{0x00})
+	tunnelWriter := <-tunnel.Writer
+
+	loader2, _ := pterm.DefaultSpinner.WithWriter(s).Start("sending file...")
+
+	// send the file
+	_, err = io.CopyN(tunnelWriter, s, int64(fileSizeInt))
+	if err != nil {
+		loader2.Fail("Error sending file")
+	}
+
+	s.Write([]byte{0x00})
+
+	return
 }
