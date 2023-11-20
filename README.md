@@ -35,6 +35,19 @@ ssh beampaw.xyz < file.txt
 ssh beampaw.xyz name=myfile.txt < file.txt
 ```
 
+### Send a folder
+
+1 - zip the folder
+```bash
+zip -r temp.zip myfolder/
+```
+> learn more about [zip command usage](https://www.geeksforgeeks.org/zip-command-in-linux-with-examples/)
+
+2 - sent the zip file with a **.zip** file extension
+```bash
+ssh beampaw.xyz name=myfolder.zip < temp.zip
+```
+
 
 ## Run Localy
 
@@ -70,3 +83,4 @@ go run main.go
 
 
 ## Self Host
+I'll add a guide when I figure it out 🙃
