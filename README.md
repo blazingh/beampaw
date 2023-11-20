@@ -1,5 +1,4 @@
 
-
 <p align="center">
   <a href="https://beampaw.xyz">
     <img src="https://raw.githubusercontent.com/blazingh/beampaw/main/public/beam_paw_icon.jpeg" alt="Logo" width=100 height=100>
@@ -84,3 +83,4 @@ go run main.go
 
 
 ## Self Host
+I'll add a guide when I figure it out 🙃
