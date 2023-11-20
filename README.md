@@ -1,4 +1,5 @@
 
+
 <p align="center">
   <a href="https://beampaw.xyz">
     <img src="https://raw.githubusercontent.com/blazingh/beampaw/main/public/beam_paw_icon.jpeg" alt="Logo" width=100 height=100>
@@ -33,6 +34,19 @@ ssh beampaw.xyz < file.txt
 ### Send a file with a specific name
 ```bash
 ssh beampaw.xyz name=myfile.txt < file.txt
+```
+
+### Send a folder
+
+1 - zip the folder
+```bash
+zip -r temp.zip myfolder/
+```
+> learn more about [zip command usage](https://www.geeksforgeeks.org/zip-command-in-linux-with-examples/)
+
+2 - sent the zip file with a **.zip** file extension
+```bash
+ssh beampaw.xyz name=myfolder.zip < temp.zip
 ```
 
 
