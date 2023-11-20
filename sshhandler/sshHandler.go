@@ -52,6 +52,11 @@ func handleConnection(s ssh.Session) {
 			{Level: 1, Text: "ssh beampaw.xyz < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
 			{Level: 0, Text: "Send a file with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
 			{Level: 1, Text: "ssh beampaw.xyz name=myfile.txt < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+			{Level: 0, Text: "Send a folder with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+			{Level: 1, Text: "zip the folder", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "1-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+			{Level: 1, Text: "zip -r output.zip myfolder/", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+			{Level: 1, Text: "send the zip file", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "2-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+			{Level: 1, Text: "ssh beampaw.xyz name=myfolder.zip < output.zip\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
 		}).Render()
 		return
 	}
