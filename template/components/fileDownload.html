@@ -1,11 +1,14 @@
 {{define "fileDownload"}}
+
 <a href="{{.DownloadURL}}" target="_blank">
   <div class="flex items-center gap-4 w-full p-4 bg-neutral-content rounded-lg text-neutral">
 
     <!-- file icon start -->
     <div
-      class="bg-secondary w-[52px] h-[66px] text-secondary-content font-bold text-lg rounded-lg p-2 flex items-end justify-end flex-shrink-0 relative rounded-tr-3xl overflow-hidden">
-      <div class="w-[20px] h-[20px] absolute top-0 right-0 bg-secondary-content rounded-bl-lg">
+      class="w-[52px] h-[66px] font-bold text-lg rounded-lg p-2 flex items-end justify-center flex-shrink-0 relative rounded-tr-3xl overflow-hidden"
+      style="background-color: {{.FileColor}}; color: color-mix(in srgb, {{.FileColor}} , black 50%)">
+      <div class="w-[20px] h-[20px] absolute top-0 right-0 rounded-bl-lg"
+        style="background-color: color-mix(in srgb, {{.FileColor}} , black 50%)">
       </div>
       {{.FileExtension}}
     </div>

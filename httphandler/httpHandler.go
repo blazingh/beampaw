@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/blazingh/beampaw/helper"
 	sshHandler "github.com/blazingh/beampaw/sshhandler"
 )
 
@@ -58,20 +59,27 @@ func handleGetFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	splitFileName := strings.Split(openTunnel.FileName, ".")
+	fileColor, ok := helper.FileExtensionsColors[splitFileName[len(splitFileName)-1]]
+	if !ok {
+		fileColor = "#000000"
+	}
 
 	data := struct {
 		TunnelId      string `json:"tunnelId"`
 		TunnelType    string `json:"tunnelType"`
 		FileName      string `json:"fileName"`
 		FileExtension string `json:"fileExtension"`
+		FileColor     string `json:"fileColor"`
 		DownloadURL   string `json:"downloadUrl"`
 	}{
 		TunnelId:      idstr,
 		TunnelType:    "ssh",
 		FileName:      openTunnel.FileName,
 		FileExtension: splitFileName[len(splitFileName)-1],
+		FileColor:     fileColor,
 		DownloadURL:   os.Getenv("WEB_URL") + "/file?id=" + idstr,
 	}
+
 	tmpl, err := template.New("fileDownload").ParseFiles("template/components/fileDownload.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
