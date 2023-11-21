@@ -44,25 +44,16 @@ func handleConnection(s ssh.Session) {
 		s.Close()
 	}()
 
+	args, _ := helper.ParseArgs(s.Command())
+
 	// handle help
-	if len(s.Command()) == 1 && s.Command()[0] == "help" {
-		helper.PrintProjectHeader(s)
-		pterm.DefaultBulletList.WithWriter(s).WithItems([]pterm.BulletListItem{
-			{Level: 0, Text: "Send a file", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
-			{Level: 1, Text: "ssh beampaw.xyz < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
-			{Level: 0, Text: "Send a file with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
-			{Level: 1, Text: "ssh beampaw.xyz name=myfile.txt < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
-			{Level: 0, Text: "Send a folder with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
-			{Level: 1, Text: "zip the folder", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "1-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
-			{Level: 1, Text: "zip -r output.zip myfolder/", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
-			{Level: 1, Text: "send the zip file", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "2-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
-			{Level: 1, Text: "ssh beampaw.xyz name=myfolder.zip < output.zip\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
-		}).Render()
+	if _, ok := args["help"]; ok {
+		handleHelp(s)
 		return
 	}
 
 	// handle scp file streaming
-	if len(s.Command()) != 0 && s.Command()[0] == "scp" {
+	if _, ok := args["scp"]; ok {
 		openSCPStream(s)
 		return
 	}
@@ -71,6 +62,27 @@ func handleConnection(s ssh.Session) {
 	openSSHStream(s)
 	return
 
+}
+
+func handleHelp(s ssh.Session) {
+	helper.PrintProjectHeader(s)
+	pterm.DefaultBulletList.WithWriter(s).WithItems([]pterm.BulletListItem{
+		// send a file
+		{Level: 0, Text: "Send a file", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "ssh beampaw.xyz < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+
+		// send a file with a specific name
+		{Level: 0, Text: "Send a file with a specific name", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "ssh beampaw.xyz name=myfile.txt < file.txt\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+
+		// send a folder
+		{Level: 0, Text: "Send a folder", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "zip the folder", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "1-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "zip -r output.zip myfolder/", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+		{Level: 1, Text: "send the zip file", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "2-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "ssh beampaw.xyz name=myfolder.zip < output.zip\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+	}).Render()
+	return
 }
 
 func openSSHStream(s ssh.Session) {
@@ -113,6 +125,7 @@ func openSSHStream(s ssh.Session) {
 	// tunnel id
 	pterm.Info.WithWriter(s).Println("tunnel id: " + strconv.Itoa(id))
 	pterm.DefaultBasicText.WithWriter(s).Print("\n")
+
 	// download page link
 	pterm.DefaultBox.
 		WithWriter(s).
@@ -121,6 +134,7 @@ func openSSHStream(s ssh.Session) {
 		WithTitle(pterm.FgCyan.Sprint("Download page")).
 		Println(os.Getenv("WEB_URL") + "/download?id=" + strconv.Itoa(id))
 	pterm.DefaultBasicText.WithWriter(s).Print("\n")
+
 	// direct link
 	pterm.DefaultBox.
 		WithWriter(s).
@@ -139,6 +153,7 @@ func openSSHStream(s ssh.Session) {
 		close(tunnel.DoneChan)
 	}()
 
+	// wait for the writer from the http
 	tunnelWriter := <-tunnel.Writer
 	loader1.Info("Connection established")
 
