@@ -33,6 +33,13 @@ tidy:
 # DEVELOPMENT
 # ==================================================================================== #
 
+## init: bootstrap the project
+.PHONY: init
+init:
+	ssh-keygen -t rsa -b 4096 -f id_rsa -q -N ''
+	npm i
+	go mod tidy
+
 ## build: build the application
 .PHONY: build
 build:
@@ -69,4 +76,3 @@ production/deploy: confirm tidy no-dirty
 	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=/tmp/bin/linux_amd64/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 	echo "output to /tmp/bin/linux_amd64/${BINARY_NAME}"
 	echo "this script is not yet complete"
-
