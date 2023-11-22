@@ -6,3 +6,5 @@ id_rsa.pub
 node_modules
 
 public/index.css
+
+tmp
