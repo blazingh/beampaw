@@ -19,7 +19,7 @@ COPY go.sum ./
 COPY Makefile ./
 
 # bootstrap the project
-RUN make init
+RUN make init/modules
 
 # copy rest of the files
 COPY . ./

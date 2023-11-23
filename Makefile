@@ -33,10 +33,15 @@ tidy:
 # DEVELOPMENT
 # ==================================================================================== #
 
-## init: bootstrap the project
-.PHONY: init
+## init/vars: configure the project variables
+.PHONY: init/vars
 init:
+	cp .env.example .env
 	ssh-keygen -t rsa -b 4096 -f id_rsa -q -N ''
+
+## init/modules: install dependencies
+.PHONY: init/modules
+init:
 	npm i
 	go mod tidy
 
@@ -45,6 +50,11 @@ init:
 build:
 	npx tailwindcss -i ./styles.css -o ./public/index.css --minify
 	go build -o=/tmp/bin/${BINARY_NAME} ${MAIN_PACKAGE_PATH}
+
+## build/docker: build the application for docker
+.PHONY: build/docker
+build/docker:
+	docker build -t ${BINARY_NAME}:latest .
 
 ## run: run the  application
 .PHONY: run
