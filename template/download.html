@@ -75,21 +75,16 @@
       }
       return res.text();
     }).then(function (res) {
-      console.log(res);
       for (let i = 0; i < resContent.length; i++) {
         resContent[i].classList.remove("hidden");
       }
       resFile.innerHTML = res;
     }).catch(function (error) {
-      console.log(error);
-      // show error alert
       alert.classList.remove("hidden");
       alert.classList.add("alert-error");
       alert.innerHTML = "Tunnel not found!";
     }).finally(function () {
-      // enable submit button
       submitButton.disabled = false;
-      // hide loader
       loader.classList.add("hidden");
     });
   });
