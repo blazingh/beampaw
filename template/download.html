@@ -79,6 +79,11 @@
         resContent[i].classList.remove("hidden");
       }
       resFile.innerHTML = res;
+      // get the script from res
+      scrpit = resFile.querySelector("script");
+      // run the script
+      eval(scrpit.innerHTML);
+      loader.classList.add("hidden");
     }).catch(function (error) {
       alert.classList.remove("hidden");
       alert.classList.add("alert-error");

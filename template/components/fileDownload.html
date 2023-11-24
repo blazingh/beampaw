@@ -1,6 +1,6 @@
 {{define "fileDownload"}}
 
-<a href="{{.DownloadURL}}" target="_blank">
+<a href="{{.DownloadURL}}" title="dowload file" target="_blank" id="download-btn">
   <div class="flex items-center gap-4 w-full p-4 bg-neutral-content rounded-lg text-neutral">
 
     <!-- file icon start -->
@@ -35,4 +35,35 @@
 
   </div>
 </a>
+
+<!-- file downloaded alert start -->
+<div id="file-downloaded-alert" class="alert alert-success w-full flex justify-center font-medium text-lg hidden">
+  <!-- check icon start -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2">
+    <circle cx="12" cy="12" r="10" />
+    <path d="m9 12 2 2 4-4" />
+  </svg>
+  <!-- check icon end -->
+  File Downloaded
+</div>
+<!-- file downloaded alert end -->
+
+<script>
+
+  const downloadBtn = document.getElementById('download-btn');
+  const downloadAlert = document.getElementById('file-downloaded-alert');
+
+  function removeDownloadButton() {
+    downloadBtn.classList.add('hidden');
+    downloadAlert.classList.remove('hidden');
+  }
+
+  downloadBtn.addEventListener('click', function () {
+    removeDownloadButton();
+  });
+
+</script>
+
+
 {{end}}
