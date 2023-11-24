@@ -87,10 +87,16 @@
     }).catch(function (error) {
       alert.classList.remove("hidden");
       alert.classList.add("alert-error");
-      alert.innerHTML = "Tunnel not found!";
+      alert.innerHTML = "File not found!";
     }).finally(function () {
       submitButton.disabled = false;
       loader.classList.add("hidden");
+
+      // update the url query
+      const url = new URL(window.location);
+      url.searchParams.set('id', id);
+      window.history.replaceState({}, '', url);
+
     });
   });
 
