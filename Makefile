@@ -41,7 +41,7 @@ init:
 
 ## init/modules: install dependencies
 .PHONY: init/modules
-init:
+init/modules:
 	npm i
 	go mod tidy
 

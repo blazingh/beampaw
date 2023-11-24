@@ -81,6 +81,10 @@ func handleHelp(s ssh.Session) {
 		{Level: 1, Text: "zip -r output.zip myfolder/", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
 		{Level: 1, Text: "send the zip file", TextStyle: pterm.NewStyle(pterm.FgCyan), Bullet: "2-", BulletStyle: pterm.NewStyle(pterm.FgCyan)},
 		{Level: 1, Text: "ssh beampaw.xyz name=myfolder.zip < output.zip\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
+
+		// recive a file with wget
+		{Level: 0, Text: "Recive a file with wget", TextStyle: pterm.NewStyle(pterm.FgCyan), BulletStyle: pterm.NewStyle(pterm.FgCyan)},
+		{Level: 1, Text: "wget https://beampaw.xyz/file?id={file_id}\n", TextStyle: pterm.NewStyle(pterm.FgLightWhite), Bullet: "$", BulletStyle: pterm.NewStyle(pterm.FgLightWhite)},
 	}).Render()
 	return
 }
