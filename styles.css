@@ -13,3 +13,48 @@ body {
   height: 100vh;
 }
 
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--s)) oklch(var(--sc));
+}
+
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background-color: oklch(var(--sc));
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background-color: oklch(var(--s));
+}
+
+.section {
+    width: 100%;
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .section {
+    animation: fadeIn linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% contain 100%;
+  }
+

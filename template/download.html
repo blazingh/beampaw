@@ -5,36 +5,40 @@
 {{end}}
 
 {{define "content"}}
-<div
-  class="bg-neutral text-primary w-full max-w-sm relative shadow-xl rounded-3xl px-8 py-6 flex flex-col items-center gap-4  -translate-y-1/2">
 
-  <div id="res-file" class="w-full hidden res-content">
+<div class="section">
+  <div
+    class="bg-neutral text-primary w-full max-w-sm relative shadow-xl rounded-3xl px-8 py-6 flex flex-col items-center gap-4  -translate-y-1/2">
+
+    <div id="res-file" class="w-full hidden res-content">
+    </div>
+
+    <div class="flex flex-col w-full res-content hidden">
+      <div class="divider divider-info text-neutral-content">Looking for other files ?</div>
+    </div>
+
+    <span id="find-file-loader" class="loading loading-dots loading-lg hidden"></span>
+
+    <form class="flex w-full gap-2" id="find-file-form">
+
+      <input name="id" type="text" placeholder="File ID" class="input input-bordered input-primary w-full max-w-xs" />
+
+      <button class="btn btn-active btn-primary self-end" id="find-file-btn" type="submit">
+        Find
+      </button>
+
+    </form>
+
+    <div id="find-file-alert" class="alert w-full hidden"></div>
+
   </div>
-
-  <div class="flex flex-col w-full res-content hidden">
-    <div class="divider divider-info text-neutral-content">Looking for other files ?</div>
-  </div>
-
-  <span id="find-file-loader" class="loading loading-dots loading-lg hidden"></span>
-
-  <form class="flex w-full gap-2" id="find-file-form">
-
-    <input name="id" type="text" placeholder="File ID" class="input input-bordered input-primary w-full max-w-xs" />
-
-    <button class="btn btn-active btn-primary self-end" id="find-file-btn" type="submit">
-      Find
-    </button>
-
-  </form>
-
-  <div id="find-file-alert" class="alert w-full hidden"></div>
-
 </div>
+
 {{end}}
 
 {{define "scripts"}}
-<script>
 
+<script>
   document.addEventListener("DOMContentLoaded", function () {
     const idQuery = new URLSearchParams(window.location.search).get("id");
     if (idQuery) {
@@ -99,6 +103,6 @@
 
     });
   });
-
 </script>
+
 {{end}}

@@ -12,6 +12,8 @@ module.exports = {
       "night",
     ],
   },
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+  ],
 }
 
